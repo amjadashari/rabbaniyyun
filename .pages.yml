@@ -1,0 +1,160 @@
+media:
+  - name: images
+    label: Images
+    input: public/uploads
+    output: /uploads
+    categories: [image]
+    extensions: [png, jpg, jpeg, webp]
+    rename: safe
+
+content:
+  - name: authors
+    label: Authors
+    type: collection
+    path: src/data/authors
+    format: yaml-frontmatter
+    filename:
+      template: "{slug}.md"
+      field: create
+    view:
+      primary: name
+      fields: [name, role, slug]
+      search: [name, role, bio]
+    fields:
+      - { name: name, label: Name, type: string, required: true }
+      - { name: slug, label: Slug, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: role, label: Role, type: string, required: true }
+      - { name: photo, label: Photo, type: image, options: { media: images, path: authors, rename: safe } }
+      - { name: bio, label: Short bio, type: text }
+      - name: body
+        label: Full profile
+        type: rich-text
+        options: { media: images, path: authors, rename: safe, switcher: true }
+
+  - name: sahabat
+    label: Sahabat & Sahabiyah
+    type: collection
+    path: src/data/sahabat
+    format: yaml-frontmatter
+    filename:
+      template: "{slug}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, section, era, status, published]
+      sort: [timeline_order, title, published_at]
+      search: [title, role, excerpt]
+      default: { sort: timeline_order, order: asc }
+    fields:
+      - { name: title, label: Name, type: string, required: true }
+      - { name: slug, label: Slug, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - name: section
+        label: Section
+        type: select
+        options:
+          values:
+            - { name: sahabat, label: Sahabat }
+            - { name: sahabiyah, label: Sahabiyah }
+      - name: gender
+        label: Gender
+        type: select
+        options: { values: [male, female] }
+      - { name: language, label: Language, type: select, options: { values: [my, en] } }
+      - { name: translation_key, label: Translation key, type: string }
+      - name: era
+        label: Timeline era
+        type: select
+        options:
+          values: [early_makkah, makkah, pre_hijrah, early_madinah, mid_madinah, pre_conquest, conquest, late]
+      - { name: timeline_order, label: Timeline order, type: number }
+      - { name: role, label: Role, type: string }
+      - name: badges
+        label: Categories
+        type: select
+        options:
+          multiple: true
+          values:
+            - { name: jannah, label: 10 dijanjikan syurga }
+            - { name: badr, label: Ahli Badr }
+            - { name: ahl, label: Ahl al-Bayt }
+            - { name: ansar, label: Ansar }
+            - { name: muhajir, label: Muhajirun }
+            - { name: mother, label: Ummahat al-Mu’minin }
+      - { name: card_image, label: Card image, type: image, options: { media: images, path: sahabat, rename: safe } }
+      - { name: excerpt, label: Excerpt, type: text }
+      - name: authors
+        label: Authors
+        type: reference
+        required: true
+        options:
+          collection: authors
+          multiple: true
+          min: 1
+          value: "{name}"
+          label: "{fields.name}"
+          search: "name,role"
+      - name: status
+        label: Editorial status
+        type: select
+        options: { values: [seed, draft, review, published] }
+      - { name: published, label: Public, type: boolean }
+      - { name: published_at, label: Publish date, type: date }
+      - name: body
+        label: Article
+        type: rich-text
+        options: { media: images, path: sahabat, rename: safe, switcher: true }
+
+  - name: articles
+    label: General Articles
+    type: collection
+    path: src/data/articles
+    format: yaml-frontmatter
+    filename:
+      template: "{slug}.md"
+      field: create
+    view:
+      primary: title
+      fields: [title, language, status, published_at]
+      search: [title, excerpt]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: slug, label: Slug, type: string, required: true, pattern: "^[a-z0-9-]+$" }
+      - { name: language, label: Language, type: select, options: { values: [en, my] } }
+      - { name: translation_key, label: Translation key, type: string }
+      - { name: excerpt, label: Excerpt, type: text }
+      - { name: featured_image, label: Featured image, type: image, options: { media: images, path: articles, rename: safe } }
+      - name: authors
+        label: Authors
+        type: reference
+        required: true
+        options:
+          collection: authors
+          multiple: true
+          min: 1
+          value: "{name}"
+          label: "{fields.name}"
+          search: "name,role"
+      - { name: status, label: Editorial status, type: select, options: { values: [draft, review, published] } }
+      - { name: published, label: Public, type: boolean }
+      - { name: published_at, label: Publish date, type: date }
+      - name: body
+        label: Article
+        type: rich-text
+        options: { media: images, path: articles, rename: safe, switcher: true }
+
+  - name: site
+    label: Site Settings
+    type: file
+    path: src/data/site.json
+    fields:
+      - { name: title, type: string }
+      - { name: description, type: text }
+      - { name: url, type: string }
+
+settings:
+  commit:
+    identity: user
+    templates:
+      create: "content: create {path} by {userName}"
+      update: "content: update {path} by {userName}"
+      delete: "content: delete {path} by {userName}"

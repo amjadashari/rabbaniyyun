@@ -1,0 +1,4 @@
+---
+import { getCollection, render } from 'astro:content';import ArticleLayout from '../../layouts/ArticleLayout.astro';import { resolveAuthors } from '../../lib/content';export async function getStaticPaths(){const e=await getCollection('articles');return e.map(entry=>({params:{slug:entry.data.slug},props:{entry}}));}const {entry}=Astro.props;const {Content,headings}=await render(entry);const authors=await resolveAuthors(entry.data.authors||[]);
+---
+<ArticleLayout entry={entry} authors={authors} headings={headings} lang={entry.data.language||'en'}><Content /></ArticleLayout>

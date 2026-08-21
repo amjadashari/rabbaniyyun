@@ -1,0 +1,13 @@
+---
+const { entry }=Astro.props; const d=entry.data;
+const labels:any={jannah:['★','10 dijanjikan syurga'],badr:['◈','Ahli Badr'],ahl:['✦','Ahl al-Bayt'],ansar:['ن','Ansar'],muhajir:['م','Muhajirun'],mother:['أم','Ummahat al-Mu’minin']};
+const priority=['mother','jannah','badr','ahl','ansar','muhajir'];
+const primary=priority.find(x=>(d.badges||[]).includes(x));
+const theme=primary?`theme-${primary}`:'theme-default';
+const href=d.section==='sahabiyah'?`/sahabiyah/${d.slug}/`:`/sahabat/${d.slug}/`;
+---
+<a class={`game-card ${theme}`} href={href} data-search={`${d.title} ${d.role} ${d.excerpt} ${(d.badges||[]).join(' ')}`.toLowerCase()} data-badges={(d.badges||[]).join(' ')} data-gender={d.gender}>
+  <div class="badge-row">{(d.badges||[]).slice(0,3).map((b:string)=> labels[b] && <span class="badge" data-tip={labels[b][1]}>{labels[b][0]}</span>)}</div>
+  <div class="portrait"><img src={d.card_image} alt={`Ilustrasi faceless ${d.title}`} loading="lazy" /></div>
+  <div class="card-info"><h3>{d.title}</h3><div class="role">{d.role}</div><div class="excerpt">{d.excerpt}</div></div>
+</a>

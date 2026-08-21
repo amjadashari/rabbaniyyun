@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import { getCollection } from 'astro:content';const posts=(await getCollection('articles')).filter(p=>p.data.published);
+---
+<BaseLayout title="Articles"><section class="hero"><div class="wrap"><div class="eyebrow">Rabbaniyyun</div><h1>Articles</h1><p>Qur'an, hadith, reflections, and ideas.</p></div></section><section class="section"><div class="wrap"><div class="grid">{posts.map(p=><a class="editorial-card" href={`/articles/${p.data.slug}/`}><div class="body"><h3>{p.data.title}</h3><p>{p.data.excerpt}</p></div></a>)}</div></div></section></BaseLayout>

@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+const { title = 'Rabbaniyyun', description = "Qur'an, hadith, reflections, and ideas for Muslims trying to live with clarity and purpose.", lang='en' } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content={description} />
+  <title>{title === 'Rabbaniyyun' ? title : `${title} — Rabbaniyyun`}</title>
+  <script is:inline>
+    try{document.documentElement.dataset.theme=localStorage.getItem('rabbaniyyun-theme')||'light'}catch(e){}
+  </script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="/">Rabbaniyyun</a>
+    <nav class="nav">
+      <a href="/">Home</a><a href="/articles/">Articles</a><a href="/sahabat/">Sahabat</a><a href="/authors/">Authors</a>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-btn" href={lang==='my' ? '/' : '/my/'}>{lang==='my' ? 'EN' : 'BM'}</a>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">◐</button>
+    </div>
+  </div>
+</header>
+<main><slot /></main>
+<footer class="site-footer"><div class="wrap footer-grid">
+  <div><strong>Rabbaniyyun</strong><p>Qur'an, hadith, reflections, and ideas for Muslims trying to live with clarity and purpose.</p></div>
+  <div class="footer-col"><strong>Explore</strong><a href="/">Home</a><a href="/articles/">Articles</a><a href="/sahabat/">Sahabat</a><a href="/authors/">Authors</a></div>
+  <div class="footer-col"><strong>Topics</strong><a href="/articles/">Quran</a><a href="/articles/">Hadith</a><a href="/sahabat/">Sirah</a></div>
+  <div class="footer-col"><strong>Language</strong><a href="/">English</a><a href="/my/">Bahasa Melayu</a></div>
+  <div class="footer-bottom">© {new Date().getFullYear()} Rabbaniyyun. All rights reserved.</div>
+</div></footer>
+<script is:inline>
+  document.getElementById('themeToggle')?.addEventListener('click',()=>{const r=document.documentElement;const n=r.dataset.theme==='dark'?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('rabbaniyyun-theme',n)}catch(e){}});
+</script>
+</body></html>

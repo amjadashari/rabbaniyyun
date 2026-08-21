@@ -1,0 +1,9 @@
+---
+const { author } = Astro.props;
+const d=author.data; const initials=(d.name||'?').split(/\s+/).map((x:string)=>x[0]).slice(0,2).join('').toUpperCase();
+---
+<article class="author-card">
+  <div class="author-avatar">{d.photo ? <img src={d.photo} alt="" /> : initials}</div>
+  <strong>{d.name}</strong><small>{d.role}</small>
+  {d.bio && <p style="font-size:12px;color:var(--muted);line-height:1.45">{d.bio}</p>}
+</article>

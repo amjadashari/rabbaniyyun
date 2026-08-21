@@ -1,0 +1,18 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AuthorCard from '../components/AuthorCard.astro';
+const { entry, authors=[], headings=[], lang='my' }=Astro.props; const d=entry.data;
+const section=d.section==='sahabiyah'?'Sahabiyah':d.section==='sahabat'?'Sahabat':'Article';
+---
+<BaseLayout title={d.title} description={d.excerpt} lang={lang}>
+  <header class="article-head"><div class="kicker">{section}</div><h1>{d.title}</h1><div class="excerpt">{d.excerpt}</div><div class="meta-row"><span>{d.role}</span>{d.published_at&&<span>{d.published_at}</span>}<span>{authors.map((a:any)=>a.data.name).join(' · ')}</span></div></header>
+  {d.card_image && <div class="lead-media"><img src={d.card_image} alt={`Ilustrasi ${d.title}`} /></div>}
+  <div class="reading-layout">
+    <aside class="authors-col">{authors.map((a:any)=><AuthorCard author={a}/>)}</aside>
+    <article class="article">
+      {d.status==='seed' && <div class="status-note">Artikel asas. Editor boleh kembangkan kandungan ini terus melalui Pages CMS tanpa menyentuh code.</div>}
+      {headings.length>1 && <nav class="toc"><strong>On this page</strong>{headings.filter((h:any)=>h.depth<=3).map((h:any)=><a href={`#${h.slug}`}>{h.text}</a>)}</nav>}
+      <slot />
+    </article>
+  </div>
+</BaseLayout>

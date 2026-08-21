@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import AuthorCard from '../../components/AuthorCard.astro';import { getCollection } from 'astro:content';const authors=await getCollection('authors');
+---
+<BaseLayout title="Authors"><section class="hero"><div class="wrap"><div class="eyebrow">Rabbaniyyun</div><h1>Authors</h1><p>Writers and contributors behind Rabbaniyyun.</p></div></section><section class="section"><div class="wrap"><div class="grid">{authors.map(a=><a href={`/authors/${a.data.slug}/`}><AuthorCard author={a}/></a>)}</div></div></section></BaseLayout>

@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SahabatCard from '../../components/SahabatCard.astro';
+import { getCollection } from 'astro:content';
+const entries=(await getCollection('sahabat')).filter(x=>x.data.published&&x.data.gender==='female').sort((a,b)=>(a.data.timeline_order||0)-(b.data.timeline_order||0));
+---
+<BaseLayout lang="my" title="Sahabiyah"><section class="hero"><div class="wrap"><div class="eyebrow">Sirah</div><h1>Sahabiyah</h1><p>Koleksi sahabiyah utama dengan artikel yang boleh disunting dan dikembangkan oleh penulis Rabbaniyyun.</p></div></section><section class="section"><div class="wrap"><div class="sahaba-grid">{entries.map(entry=><SahabatCard entry={entry}/>)}</div></div></section></BaseLayout>
